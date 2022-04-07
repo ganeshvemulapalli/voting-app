@@ -12,13 +12,13 @@ on:
         - production
       Provision_Infra:
         type: boolean
-        description: Deploys AKS and ACR
+        description: Provision AKS and ACR
       Docker_Images:
         type: boolean
-        description: Builds and pushed docker images to ACR
+        description: Build and push docker images to ACR
       Deploy:
         type: boolean
-        description: Deploys all the objects to AKS
+        description: Deploy to AKS
  
 permissions:
   id-token: write
