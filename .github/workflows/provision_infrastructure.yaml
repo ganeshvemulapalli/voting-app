@@ -1,5 +1,23 @@
-name: GitHub Actions Demo
-on: [workflow_dispatch]
+name: voting app deployment to AKS
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        type: choice
+        description: environment
+        default: 'production' 
+        options: 
+        - dev
+        - stage
+        - production
+      message:
+        required: true
+      use-emoji:
+        type: boolean
+        description: Include  emojis
+      environment:
+        type: environment
+ 
 permissions:
   id-token: write
 jobs:
@@ -11,14 +29,14 @@ jobs:
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v2
-      - name: install ansible
-        run: |
-          sudo apt update
-          sudo apt install software-properties-common
-          sudo add-apt-repository --yes --update ppa:ansible/ansible
-          sudo apt install ansible
-      - name: show ansible version
-        run: ansible --version
+      # - name: install ansible
+      #   run: |
+      #     sudo apt update
+      #     sudo apt install software-properties-common
+      #     sudo add-apt-repository --yes --update ppa:ansible/ansible
+      #     sudo apt install ansible
+      # - name: show ansible version
+      #   run: ansible --version
       - name: azure log in using OIDC
         uses: azure/login@v1
         with:
