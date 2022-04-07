@@ -25,7 +25,7 @@ jobs:
       - name: install ansible
         run: |
           sudo pip3 install ansible
-          sudo pip3 install 'ansible[azure]''
+          sudo pip3 install 'ansible[azure]'
           curl -O https://raw.githubusercontent.com/ansible-collections/azure/dev/requirements-azure.txt
           sudo pip3 install -r requirements-azure.txt
       - name: show ansible version
