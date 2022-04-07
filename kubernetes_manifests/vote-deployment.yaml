@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: vote
-        image: dockersamples/examplevotingapp_vote:before
+        image: votingapp#{acr_env}#acr.azurecr.io/vote:latest
         resources:
           limits:
             cpu: 200m
