@@ -22,14 +22,14 @@ jobs:
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v2
-      # - name: install ansible
-      #   run: |
-      #     sudo apt update
-      #     sudo apt install software-properties-common
-      #     sudo add-apt-repository --yes --update ppa:ansible/ansible
-      #     sudo apt install ansible
-      # - name: show ansible version
-      #   run: ansible --version
+      - name: install ansible
+        run: |
+          sudo apt update
+          sudo apt install software-properties-common
+          sudo add-apt-repository --yes --update ppa:ansible/ansible
+          sudo apt install ansible
+      - name: show ansible version
+        run: ansible --version
       - name: azure log in using OIDC
         uses: azure/login@v1
         with:
@@ -41,3 +41,8 @@ jobs:
           az account show
           az group list
           pwd
+      - name: Build and analysis
+        env:
+          resource_group: votingapp-${{ github.event.inputs.name.description= }}-rg
+          location: eastus
+        run: ansible-playbook azure_infra_with_ansible/azure_create_aks.yml -e "resource_group=$resource_group location=$location"
