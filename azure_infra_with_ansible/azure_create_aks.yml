@@ -1,14 +1,14 @@
-- name: Create Azure Kubernetes Service
+- name: Create AKS and ACR
   hosts: localhost
   connection: local
   tasks:
 
-  - name: Create resource group
+  - name: Create azure resource group
     azure_rm_resourcegroup:
       name: "{{ resource_group }}"
       location: "{{ location }}"
 
-  - name: Create a managed Azure Container Services (AKS) cluster
+  - name: Create a managed AKS cluster
     azure_rm_aks:
       name: "{{ aks_name }}"
       location: "{{ location }}"
