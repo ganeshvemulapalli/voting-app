@@ -10,13 +10,6 @@ on:
         - dev
         - stage
         - production
-      message:
-        required: true
-      use-emoji:
-        type: boolean
-        description: Include  emojis
-      environment:
-        type: environment
  
 permissions:
   id-token: write
