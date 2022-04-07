@@ -20,3 +20,4 @@
         - name: default
           count: 1
           vm_size: Standard_B2ms
+          mode : System
