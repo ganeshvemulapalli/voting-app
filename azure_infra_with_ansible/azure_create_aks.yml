@@ -30,7 +30,7 @@
       name: "{{ registry_name }}"
       admin_user_enabled: True
       sku: Basic
-      register: acr_result
+    register: acr_result
 
   - name: Login to acr docker registry
     docker_login:
