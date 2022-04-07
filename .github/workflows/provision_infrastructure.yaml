@@ -26,7 +26,7 @@ jobs:
         run: |
           sudo pip3 install ansible[azure] -I
           ansible-galaxy collection install azure.azcollection
-          sudo pip3 install -r requirment-azure.txt -I
+          sudo pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
       - name: show ansible version
         run: ansible --version
       - name: azure log in using OIDC
