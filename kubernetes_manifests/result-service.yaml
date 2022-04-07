@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: result
   namespace: votingapp
-  annotations:
-    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
   labels:
     app: result
 spec:
