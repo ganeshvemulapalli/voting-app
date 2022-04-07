@@ -16,7 +16,6 @@ permissions:
 
 jobs:
   Provision_AKS_ACR_With_Ansible:
-    if: ${{ github.event.inputs.Provision_Infra == 'True' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
