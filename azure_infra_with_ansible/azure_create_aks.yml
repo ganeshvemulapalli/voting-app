@@ -2,22 +2,38 @@
   hosts: localhost
   connection: local
   tasks:
+
   - name: Create resource group
     azure_rm_resourcegroup:
       name: "{{ resource_group }}"
       location: "{{ location }}"
-  - name: Create a managed Azure Container Services (AKS) cluster
-    azure_rm_aks:
-      name: "{{ aks_name }}"
-      location: "{{ location }}"
+
+  # - name: Create a managed Azure Container Services (AKS) cluster
+  #   azure_rm_aks:
+  #     name: "{{ aks_name }}"
+  #     location: "{{ location }}"
+  #     resource_group: "{{ resource_group }}"
+  #     dns_prefix: "{{ aks_name }}"
+  #     kubernetes_version: 1.21.9
+  #     service_principal:
+  #       client_id: "{{ client_id }}"
+  #       client_secret: "{{ client_secret }}"
+  #     agent_pool_profiles:
+  #       - name: default
+  #         count: 1
+  #         vm_size: Standard_B2ms
+  #         mode : System
+
+  - name: Create Azure Container Registry
+    azure_rm_containerregistry:
       resource_group: "{{ resource_group }}"
-      dns_prefix: "{{ aks_name }}"
-      kubernetes_version: 1.21.9
-      service_principal:
-        client_id: "{{ client_id }}"
-        client_secret: "{{ client_secret }}"
-      agent_pool_profiles:
-        - name: default
-          count: 1
-          vm_size: Standard_B2ms
-          mode : System
+      name: "{{ registry_name }}"
+      admin_user_enabled: True
+      sku: Basic
+      register: acr_result
+
+  - name: Login to acr docker registry
+    docker_login:
+      registry: "{{ registry_name }}.azurecr.io"
+      username: "{{ registry_name }}"
+      password: "{{ acr_result.credentials.password }}"
