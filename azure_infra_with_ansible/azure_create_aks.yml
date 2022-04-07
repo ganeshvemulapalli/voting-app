@@ -5,10 +5,7 @@
     resource_group: myResourceGroup
     location: eastus
     aks_name: myAKSCluster
-    username: azureuser
-    ssh_key: "your_ssh_key"
     client_id: "your_client_id"
-    client_secret: "your_client_secret"
     aks_version: aks_version
   tasks:
   - name: Create resource group
@@ -22,15 +19,7 @@
       resource_group: "{{ resource_group }}"
       dns_prefix: "{{ aks_name }}"
       kubernetes_version: "{{aks_version}}"
-      linux_profile:
-        admin_username: "{{ username }}"
-        ssh_key: "{{ ssh_key }}"
-      service_principal:
-        client_id: "{{ client_id }}"
-        client_secret: "{{ client_secret }}"
       agent_pool_profiles:
         - name: default
           count: 2
           vm_size: Standard_D2_v2
-      tags:
-        Environment: Production
