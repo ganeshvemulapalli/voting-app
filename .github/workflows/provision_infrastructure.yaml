@@ -1,0 +1,32 @@
+name: GitHub Actions Demo
+on: [workflow_dispatch]
+permissions:
+  id-token: write
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: install ansible
+        run: |
+          sudo apt update
+          sudo apt install software-properties-common
+          sudo add-apt-repository --yes --update ppa:ansible/ansible
+          sudo apt install ansible
+      - name: show ansible version
+        run: ansible --version
+      - name: azure log in using OIDC
+        uses: azure/login@v1
+        with:
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: 'Run az commands'
+        run: |
+          az account show
+          az group list
+          pwd
