@@ -82,3 +82,55 @@ jobs:
       - name: Push worker Image to ACR in dev
         run: |
           docker push votingapp${{ github.event.inputs.name }}acr.azurecr.io/worker:latest
+      
+      - name: create namespace
+        uses: azure/k8s-actions/k8s-deploy@master
+        with:
+          manifests: |
+            kubernetes_manifests/namespace.yaml
+      
+      - name: deploy redis on AKS
+        uses: azure/k8s-actions/k8s-deploy@master
+        with:
+          namespace: votingapp
+          manifests: |
+            kubernetes_manifests/redis-deployment.yaml
+            kubernetes_manifests/redis-service.yaml
+      
+      - name: deploy postgres db on AKS
+        uses: azure/k8s-actions/k8s-deploy@master
+        with:
+          namespace: votingapp
+          manifests: |
+            kubernetes_manifests/database-deployment.yaml
+            kubernetes_manifests/database-service.yaml
+      
+      - name: deploy vote on AKS
+        uses: azure/k8s-actions/k8s-deploy@master
+        with:
+          namespace: votingapp
+          manifests: |
+            kubernetes_manifests/vote-deployment.yaml
+            kubernetes_manifests/vote-service.yaml
+          images: |
+           votingapp${{ github.event.inputs.name }}acr.azurecr.io/vote:latest
+      
+      - name: deploy redis on AKS
+        uses: azure/k8s-actions/k8s-deploy@master
+        with:
+          namespace: votingapp
+          manifests: |
+            kubernetes_manifests/result-deployment.yaml
+            kubernetes_manifests/result-service.yaml
+          images: |
+           votingapp${{ github.event.inputs.name }}acr.azurecr.io/result:latest
+      
+      - name: deploy redis on AKS
+        uses: azure/k8s-actions/k8s-deploy@master
+        with:
+          namespace: votingapp
+          manifests: |
+            kubernetes_manifests/worker-deployment.yaml
+            kubernetes_manifests/worker-service.yaml
+          images: |
+           votingapp${{ github.event.inputs.name }}acr.azurecr.io/worker:latest

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result
+  namespace: votingapp
+  labels:
+    app: result
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: result
+  template:
+    metadata:
+      labels:
+        app: result
+    spec:
+      containers:
+      - name: result
+        image: dockersamples/examplevotingapp_result:before
+        resources:
+          limits:
+            cpu: 200m
+            memory: 128Mi       
+        ports:
+        - containerPort: 80
+          name: result
