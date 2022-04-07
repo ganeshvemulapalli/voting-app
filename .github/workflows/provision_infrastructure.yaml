@@ -28,8 +28,8 @@ jobs:
           sudo apt install software-properties-common
           sudo add-apt-repository --yes --update ppa:ansible/ansible
           sudo apt install ansible
-          sudo pip install msrest
-          sudo pip install msrestazure
+          curl -O https://raw.githubusercontent.com/ansible-collections/azure/dev/requirements-azure.txt
+          sudo pip install -r requirements-azure.txt
       - name: show ansible version
         run: ansible --version
       - name: azure log in using OIDC
