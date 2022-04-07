@@ -25,6 +25,7 @@ permissions:
 
 jobs:
   Install_Ansible_with_AzureModules:
+    if: ${{ github.event.inputs.Provision_Infra == 'True' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
