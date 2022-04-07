@@ -30,18 +30,18 @@ jobs:
       #     sudo pip install docker
       # - name: show ansible version
       #   run: ansible --version
-      # - name: azure log in using OIDC
-      #   uses: azure/login@v1
-      #   with:
-      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      # - name: 'Run az commands'
-      #   run: |
-      #     echo ${{ github.event.inputs.name }}
-      #     az account show
-      #     az group list
-      #     pwd
+      - name: azure log in using OIDC
+        uses: azure/login@v1
+        with:
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: 'Run az commands'
+        run: |
+          echo ${{ github.event.inputs.name }}
+          az account show
+          az group list
+          pwd
       # - name: Build and analysis
       #   env:
       #     resource_group: votingapp-${{ github.event.inputs.name }}-rg
