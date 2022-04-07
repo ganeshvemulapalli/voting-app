@@ -10,6 +10,15 @@ on:
         - dev
         - stage
         - production
+      Provision_Infra:
+        type: boolean
+        description: Deploys AKS and ACR
+      Docker_Images:
+        type: boolean
+        description: Builds and pushed docker images to ACR
+      Deploy:
+        type: boolean
+        description: Deploys all the objects to AKS
  
 permissions:
   id-token: write
@@ -30,6 +39,7 @@ jobs:
   
   Provision_AKS_ACR_With_Ansible:
     runs-on: ubuntu-latest
+    needs: [Install_Ansible_with_AzureModules]
     steps:
       - name: azure log in using OIDC
         uses: azure/login@v1
@@ -51,6 +61,7 @@ jobs:
         run: ansible-playbook azure_infra_with_ansible/azure_create_aks.yml -e "ansible_python_interpreter=/usr/bin/python3 resource_group=$resource_group location=$location client_id=$client_id client_secret=$client_secret aks_name=$aks_name registry_name=$registry_name"
       
   Build_And_Push_Docker_Images_To_ACR:
+    needs: [Provision_AKS_ACR_With_Ansible]
     runs-on: ubuntu-latest
     steps:
       - name: Build vote docker image
@@ -79,6 +90,7 @@ jobs:
 
   Deploy_Objects_To_AKS:
     runs-on: ubuntu-latest
+    needs: [Build_And_Push_Docker_Images_To_ACR]
     steps:      
       - uses: azure/aks-set-context@v2.0
         name: AKS set context
