@@ -58,3 +58,15 @@ jobs:
         run: |
           az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query username
           az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query passwords[0].value
+      
+      - name: Build vote docker image
+        run: |
+          docker build ./vote/. -t votingapp${{ github.event.inputs.name }}acr/vote:latest
+      
+      - name: Build result docker image
+        run: |
+          docker build ./result/. -t votingapp${{ github.event.inputs.name }}acr/result:latest
+      
+      - name: Build worker docker image
+        run: |
+          docker build ./worker/. -t votingapp${{ github.event.inputs.name }}acr/worker:latest
