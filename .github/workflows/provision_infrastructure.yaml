@@ -50,5 +50,5 @@ jobs:
           client_id: ${{ secrets.AZURE_CLIENT_ID_ANSIBLE }}
           client_secret: ${{ secrets.AZURE_CLIENT_SECRET}}
           subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          registry_name: votingapp-${{ github.event.inputs.name }}-acr
+          registry_name: votingapp${{ github.event.inputs.name }}acr
         run: ansible-playbook azure_infra_with_ansible/azure_create_aks.yml -e "ansible_python_interpreter=/usr/bin/python3 resource_group=$resource_group location=$location client_id=$client_id client_secret=$client_secret aks_name=$aks_name registry_name=$registry_name"
