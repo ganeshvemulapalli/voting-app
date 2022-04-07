@@ -94,7 +94,15 @@ jobs:
         with:
           manifests: |
             kubernetes_manifests/namespace.yaml
-      
+
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["**/*.yaml"]'
+        env:
+          acr_env: ${{ github.event.inputs.name }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+     
       - name: deploy redis on AKS
         uses: azure/k8s-actions/k8s-deploy@master
         with:
@@ -110,12 +118,6 @@ jobs:
           manifests: |
             kubernetes_manifests/database-deployment.yaml
             kubernetes_manifests/database-service.yaml
-      
-      - uses: cschleiden/replace-tokens@v1
-        with:
-          files: '["**/*.yaml"]'
-        env:
-          acr_env: ${{ github.event.inputs.name }}
       
       - name: deploy vote on AKS
         uses: azure/k8s-actions/k8s-deploy@master
