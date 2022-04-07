@@ -28,6 +28,7 @@ jobs:
           sudo apt install software-properties-common
           sudo add-apt-repository --yes --update ppa:ansible/ansible
           sudo apt install ansible
+          sudo pip install msrest
       - name: show ansible version
         run: ansible --version
       - name: azure log in using OIDC
