@@ -44,4 +44,4 @@ jobs:
         env:
           resource_group: votingapp-${{ github.event.inputs.name.description }}-rg
           location: eastus
-        run: ansible-playbook azure_infra_with_ansible/azure_create_aks.yml -e "resource_group=$resource_group location=$location"
+        run: ansible-playbook azure_infra_with_ansible/azure_create_aks.yml -e "ansible_python_interpreter=/usr/bin/python3 resource_group=$resource_group location=$location"
