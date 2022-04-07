@@ -37,11 +37,12 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: 'Run az commands'
         run: |
+          echo ${{ github.event.inputs.name }}
           az account show
           az group list
           pwd
       - name: Build and analysis
         env:
-          resource_group: votingapp-${{ github.event.inputs.name.description }}-rg
+          resource_group: votingapp-${{ github.event.inputs.name }}-rg
           location: eastus
         run: ansible-playbook azure_infra_with_ansible/azure_create_aks.yml -e "ansible_python_interpreter=/usr/bin/python3 resource_group=$resource_group location=$location"
