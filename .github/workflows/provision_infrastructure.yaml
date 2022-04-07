@@ -10,15 +10,6 @@ on:
         - dev
         - stage
         - production
-      Provision_Infra:
-        type: boolean
-        description: Provision AKS and ACR
-      Docker_Images:
-        type: boolean
-        description: Build and push docker images to ACR
-      Deploy:
-        type: boolean
-        description: Deploy to AKS
  
 permissions:
   id-token: write
@@ -37,6 +28,11 @@ jobs:
           ansible-galaxy collection install azure.azcollection
           sudo pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
           sudo pip install docker
+
+      - name: Login via Az module
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CLIENT_ID_ANSIBLE}}
 
       - name: azure log in using OIDC
         uses: azure/login@v1
@@ -58,7 +54,6 @@ jobs:
         run: ansible-playbook azure_infra_with_ansible/azure_create_aks.yml -e "ansible_python_interpreter=/usr/bin/python3 resource_group=$resource_group location=$location client_id=$client_id client_secret=$client_secret aks_name=$aks_name registry_name=$registry_name"
       
   Build_And_Push_Docker_Images_To_ACR:
-    if: ${{ github.event.inputs.Docker_Images == 'True' }}
     needs: [Provision_AKS_ACR_With_Ansible]
     runs-on: ubuntu-latest
     steps:
@@ -91,7 +86,6 @@ jobs:
 
   Deploy_Objects_To_AKS:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.Deploy == 'True' }}
     needs: [Build_And_Push_Docker_Images_To_ACR]
     steps:      
       - name: Check out repository code
