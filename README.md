@@ -44,10 +44,10 @@ Steps to provision Infra, build and deploy the app
 * AZURE_CLIENT_ID_ANSIBLE - azure service principal client id created for ansible
 * AZURE_CLIENT_SECRET_ANSIBLE - azure service principal client secret(value) created for ansible
 * POSTGRES_USER - postgres username
-* POSTGRES_PASSWORD - postgres username
+* POSTGRES_PASSWORD - postgres passowrd
 4. Go to actions, select the "voting app deployment to AKS" workflow, click Run Workflow, choose the environment type and run the workflow.
 
-After the successfull execution of the workflow, vote app will be available on port 5000 and result app on port 5001 behing the respective kubernetes loadbalancer.
+After the successfull execution of the workflow, vote app will be available on port 5000 and result app on port 5001 behind the respective kubernetes loadbalancer.
 
 kubernetes yml files in kubernetes_manifests folder
 -----
