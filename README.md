@@ -35,16 +35,16 @@ Steps to provision Infra, build and deploy the app
 -------------------------
 1. clone and publish the repository to GitHub
 2. create following service principals:
-a. Service Principal with federation credentials(for GitHub OIDC authentication- to main branch) - assign contributor role
-b. Service principal for Ansible - assign contributor role
+* Service Principal with federation credentials(for GitHub OIDC authentication- to main branch) - assign contributor role
+* Service principal for Ansible - assign contributor role
 3. create GitHub actions repository secrets for the following:
-a. AZURE_SUBSCRIPTION_ID - azure subscription id 
-b. AZURE_TENANT_ID - azure tenant id
-c. AZURE_CLIENT_ID - azure service principal client id created for GitHub OIDC authentication
-d. AZURE_CLIENT_ID_ANSIBLE - azure service principal client id created for ansible
-e. AZURE_CLIENT_SECRET_ANSIBLE - azure service principal client secret(value) created for ansible
-f. POSTGRES_USER - postgres username
-g. POSTGRES_PASSWORD - postgres username
+* AZURE_SUBSCRIPTION_ID - azure subscription id 
+* AZURE_TENANT_ID - azure tenant id
+* AZURE_CLIENT_ID - azure service principal client id created for GitHub OIDC authentication
+* AZURE_CLIENT_ID_ANSIBLE - azure service principal client id created for ansible
+* AZURE_CLIENT_SECRET_ANSIBLE - azure service principal client secret(value) created for ansible
+* POSTGRES_USER - postgres username
+* POSTGRES_PASSWORD - postgres username
 4. Go to actions, select the "voting app deployment to AKS" workflow, click Run Workflow, choose the environment type and run the workflow.
 
 After the successfull execution of the workflow, vote app will be available on port 5000 and result app on port 5001 behing the respective kubernetes loadbalancer.
