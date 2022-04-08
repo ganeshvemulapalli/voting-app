@@ -1,0 +1,13 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  namespace: votingapp
+  name: database-hpa
+spec:
+  maxReplicas: 3 # define max replica count
+  minReplicas: 1  # define min replica count
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: db
+  targetCPUUtilizationPercentage: 60 # target CPU utilization

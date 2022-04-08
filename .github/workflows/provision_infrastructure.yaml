@@ -46,16 +46,6 @@ jobs:
           subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           registry_name: votingapp${{ github.event.inputs.name }}acr
         run: ansible-playbook azure_infra_with_ansible/azure_create_aks.yml -e "ansible_python_interpreter=/usr/bin/python3 resource_group=$resource_group location=$location client_id=$client_id client_secret=$client_secret aks_name=$aks_name registry_name=$registry_name"
-
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      
-      - name: azure log in using OIDC
-        uses: azure/login@v1
-        with:
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       
       - name: Build vote docker image
         run: |
@@ -80,16 +70,6 @@ jobs:
       - name: Push worker Image to ACR in dev
         run: |
           docker push votingapp${{ github.event.inputs.name }}acr.azurecr.io/worker:latest
-     
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      
-      - name: azure log in using OIDC
-        uses: azure/login@v1
-        with:
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       
       - uses: azure/aks-set-context@v2.0
         name: AKS set context
@@ -119,6 +99,7 @@ jobs:
           manifests: |
             kubernetes_manifests/redis-deployment.yaml
             kubernetes_manifests/redis-service.yaml
+            kubernetes_manifests/hpa-redis-deployment.yaml
       
       - name: deploy postgres db on AKS
         uses: azure/k8s-actions/k8s-deploy@master
@@ -127,6 +108,7 @@ jobs:
           manifests: |
             kubernetes_manifests/database-deployment.yaml
             kubernetes_manifests/database-service.yaml
+            kubernetes_manifests/hpa-database-deployment.yaml
       
       - name: deploy vote on AKS
         uses: azure/k8s-actions/k8s-deploy@master
@@ -135,6 +117,7 @@ jobs:
           manifests: |
             kubernetes_manifests/vote-deployment.yaml
             kubernetes_manifests/vote-service.yaml
+            kubernetes_manifests/hpa-vote-deployment.yaml
       
       - name: deploy result on AKS
         uses: azure/k8s-actions/k8s-deploy@master
@@ -143,6 +126,7 @@ jobs:
           manifests: |
             kubernetes_manifests/result-deployment.yaml
             kubernetes_manifests/result-service.yaml
+            kubernetes_manifests/hpa-result-deployment.yaml
       
       - name: deploy worker on AKS
         uses: azure/k8s-actions/k8s-deploy@master
@@ -151,3 +135,4 @@ jobs:
           manifests: |
             kubernetes_manifests/worker-deployment.yaml
             kubernetes_manifests/worker-service.yaml
+            kubernetes_manifests/hpa-worker-deployment.yaml
