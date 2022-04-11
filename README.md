@@ -36,7 +36,7 @@ Steps to provision Infra, build and deploy the app
 1. clone and publish the repository to GitHub
 2. create following service principals:
 * Service Principal with federation credentials(for GitHub OIDC authentication- to main branch) - assign contributor role
-* Service principal for Ansible - assign contributor role
+* Service principal for Ansible - assign contributor role, acr push and pull role
 3. create GitHub actions repository secrets for the following:
 * AZURE_SUBSCRIPTION_ID - azure subscription id 
 * AZURE_TENANT_ID - azure tenant id
