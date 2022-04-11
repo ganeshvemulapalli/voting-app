@@ -21,12 +21,12 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
-      - name: install ansible with azure collections, docker to test login
-        run: |
-          sudo pip3 install ansible[azure] -I
-          ansible-galaxy collection install azure.azcollection
-          sudo pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
-          sudo pip install docker
+      # - name: install ansible with azure collections, docker to test login
+      #   run: |
+      #     sudo pip3 install ansible[azure] -I
+      #     ansible-galaxy collection install azure.azcollection
+      #     sudo pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
+      #     sudo pip install docker
 
       - name: azure log in using OIDC
         uses: azure/login@v1
@@ -35,41 +35,50 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Create RG, AKS and ACR with ansible
-        env:
-          resource_group: votingapp-${{ github.event.inputs.name }}-rg
-          location: southindia
-          aks_name: votingapp-${{ github.event.inputs.name }}-aks-cluster
-          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-          client_id: ${{ secrets.AZURE_CLIENT_ID_ANSIBLE }}
-          client_secret: ${{ secrets.AZURE_CLIENT_SECRET_ANSIBLE}}
-          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          registry_name: votingapp${{ github.event.inputs.name }}acr
-        run: ansible-playbook azure_infra_with_ansible/azure_create_aks.yml -e "ansible_python_interpreter=/usr/bin/python3 resource_group=$resource_group location=$location client_id=$client_id client_secret=$client_secret aks_name=$aks_name registry_name=$registry_name"
+      # - name: Create RG, AKS and ACR with ansible
+      #   env:
+      #     resource_group: votingapp-${{ github.event.inputs.name }}-rg
+      #     location: southindia
+      #     aks_name: votingapp-${{ github.event.inputs.name }}-aks-cluster
+      #     tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+      #     client_id: ${{ secrets.AZURE_CLIENT_ID_ANSIBLE }}
+      #     client_secret: ${{ secrets.AZURE_CLIENT_SECRET_ANSIBLE}}
+      #     subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      #     registry_name: votingapp${{ github.event.inputs.name }}acr
+      #   run: ansible-playbook azure_infra_with_ansible/azure_create_aks.yml -e "ansible_python_interpreter=/usr/bin/python3 resource_group=$resource_group location=$location client_id=$client_id client_secret=$client_secret aks_name=$aks_name registry_name=$registry_name"
       
-      - name: Build vote docker image
-        run: |
-          docker build ./vote/. -t votingapp${{ github.event.inputs.name }}acr.azurecr.io/vote:latest
+      # - name: Build vote docker image
+      #   run: |
+      #     docker build ./vote/. -t votingapp${{ github.event.inputs.name }}acr.azurecr.io/vote:latest
       
-      - name: Push vote Image to ACR in dev
-        run: |
-          docker push votingapp${{ github.event.inputs.name }}acr.azurecr.io/vote:latest
+      # - name: Push vote Image to ACR in dev
+      #   run: |
+      #     docker push votingapp${{ github.event.inputs.name }}acr.azurecr.io/vote:latest
       
-      - name: Build result docker image
-        run: |
-          docker build ./result/. -t votingapp${{ github.event.inputs.name }}acr.azurecr.io/result:latest
+      # - name: Build result docker image
+      #   run: |
+      #     docker build ./result/. -t votingapp${{ github.event.inputs.name }}acr.azurecr.io/result:latest
       
-      - name: Push result Image to ACR in dev
-        run: |
-          docker push votingapp${{ github.event.inputs.name }}acr.azurecr.io/result:latest
+      # - name: Push result Image to ACR in dev
+      #   run: |
+      #     docker push votingapp${{ github.event.inputs.name }}acr.azurecr.io/result:latest
       
-      - name: Build worker docker image
-        run: |
-          docker build ./worker/. -t votingapp${{ github.event.inputs.name }}acr.azurecr.io/worker:latest
+      # - name: Build worker docker image
+      #   run: |
+      #     docker build ./worker/. -t votingapp${{ github.event.inputs.name }}acr.azurecr.io/worker:latest
       
-      - name: Push worker Image to ACR in dev
+      # - name: Push worker Image to ACR in dev
+      #   run: |
+      #     docker push votingapp${{ github.event.inputs.name }}acr.azurecr.io/worker:latest
+      
+      - name: acr login
         run: |
-          docker push votingapp${{ github.event.inputs.name }}acr.azurecr.io/worker:latest
+          acr_username=$(az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query username)
+          acr_password=$(az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query passwords[0].value)
+      
+      - name: acr login
+        run: |
+          az acr login --name votingapp${{ github.event.inputs.name }}acr
       
       - uses: azure/aks-set-context@v2.0
         name: AKS set context
