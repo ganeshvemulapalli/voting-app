@@ -73,8 +73,8 @@ jobs:
       
       - name: acr login
         run: |
-          acr_username=$(az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query username)
-          acr_password=$(az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query passwords[0].value)
+          acr_username=`echo $(az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query username)`
+          acr_password=`echo $(az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query passwords[0].value)`
       
       - name: acr login
         run: |
