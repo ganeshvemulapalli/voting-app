@@ -77,6 +77,14 @@ jobs:
           acr_password=`echo $(az acr credential show -n votingapp${{ github.event.inputs.name }}acr.azurecr.io --query passwords[0].value)`
           echo $acr_password
       
+      - name: acr login
+        run: |
+          kubectl create secret docker-registry acr-secret \
+              --namespace votingapp \
+              --docker-server=votingapp${{ github.event.inputs.name }}acr.azurecr.io \
+              --docker-username=${{ secrets.AZURE_CLIENT_ID_ANSIBLE }} \
+              --docker-password=${{ secrets.AZURE_CLIENT_SECRET_ANSIBLE}}
+      
       - uses: azure/aks-set-context@v2.0
         name: AKS set context
         with:
