@@ -73,8 +73,9 @@ jobs:
       
       - name: acr login
         run: |
-          acr_username=`echo $(az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query username)`
-          acr_password=`echo $(az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query passwords[0].value)`
+          acr_username=$(az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query username)
+          acr_password=$(az acr credential show -n votingapp${{ github.event.inputs.name }}acr --query passwords[0].value)
+
       
       - name: acr login
         run: |
@@ -123,8 +124,8 @@ jobs:
         uses: azure/docker-login@v1
         with:
            login-server: votingapp${{ github.event.inputs.name }}acr
-           username: $acr_username
-           password: $acr_password
+           username: votingapp${{ github.event.inputs.name }}acr
+           password: "NamLh0C64yEi=7/Q/GrZvyhERth7lEoe"
 
       - name: deploy vote on AKS
         uses: azure/k8s-actions/k8s-deploy@master
