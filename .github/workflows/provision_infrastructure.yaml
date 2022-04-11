@@ -118,7 +118,7 @@ jobs:
       - name: 'Docker login in ACR'
         uses: azure/docker-login@v1
         with:
-           login-server: votingapp${{ github.event.inputs.name }}acr
+           login-server: votingapp${{ github.event.inputs.name }}acr.azurecr.io
            username: votingapp${{ github.event.inputs.name }}acr
            password: "NamLh0C64yEi=7/Q/GrZvyhERth7lEoe"
 
