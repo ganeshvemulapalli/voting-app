@@ -78,7 +78,7 @@ jobs:
       
       - name: acr login
         run: |
-          echo $acr_username $acr_password
+          echo ${{ acr_username }} ${{ acr_password }}
       
       - uses: azure/aks-set-context@v2.0
         name: AKS set context
