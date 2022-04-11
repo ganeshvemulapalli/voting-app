@@ -73,9 +73,8 @@ jobs:
       
       - name: acr login
         run: |
-          acr_username= $(az acr credential show -n votingapp${{ github.event.inputs.name }}acr.azurecr.io --query username)
-          acr_password= $(az acr credential show -n votingapp${{ github.event.inputs.name }}acr.azurecr.io --query passwords[0].value)
-          echo $acr_username
+          acr_username=`echo $(az acr credential show -n votingapp${{ github.event.inputs.name }}acr.azurecr.io --query username)`
+          acr_password=`echo $(az acr credential show -n votingapp${{ github.event.inputs.name }}acr.azurecr.io --query passwords[0].value)`
           echo $acr_password
       
       - uses: azure/aks-set-context@v2.0
