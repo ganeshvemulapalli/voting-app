@@ -71,11 +71,11 @@ jobs:
       #   run: |
       #     docker push votingapp${{ github.event.inputs.name }}acr.azurecr.io/worker:latest
       
-      - name: acr login
-        run: |
-          acr_username=`echo $(az acr credential show -n votingapp${{ github.event.inputs.name }}acr.azurecr.io --query username)`
-          acr_password=`echo $(az acr credential show -n votingapp${{ github.event.inputs.name }}acr.azurecr.io --query passwords[0].value)`
-          echo $acr_password
+      - uses: azure/aks-set-context@v2.0
+        name: AKS set context
+        with:
+          resource-group: votingapp-${{ github.event.inputs.name }}-rg
+          cluster-name: votingapp-${{ github.event.inputs.name }}-aks-cluster
       
       - name: acr login
         run: |
@@ -84,12 +84,6 @@ jobs:
               --docker-server=votingapp${{ github.event.inputs.name }}acr.azurecr.io \
               --docker-username=${{ secrets.AZURE_CLIENT_ID_ANSIBLE }} \
               --docker-password=${{ secrets.AZURE_CLIENT_SECRET_ANSIBLE}}
-      
-      - uses: azure/aks-set-context@v2.0
-        name: AKS set context
-        with:
-          resource-group: votingapp-${{ github.event.inputs.name }}-rg
-          cluster-name: votingapp-${{ github.event.inputs.name }}-aks-cluster
       
       - name: create namespace
         uses: azure/k8s-actions/k8s-deploy@master
