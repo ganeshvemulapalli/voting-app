@@ -2,7 +2,7 @@ pipeline {
 
     agent any
     stages {
-        stage('Hello') {
+        stage('Install Ansible and Docker') {
             steps {
                 echo 'teststring'
                 sh '''
