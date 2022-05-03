@@ -7,6 +7,10 @@ pipeline {
                 echo 'teststring'
                 sh '''
                 sudo apt-get install python3-pip -y
+                sudo pip3 install ansible[azure] -I
+                ansible-galaxy collection install azure.azcollection
+                sudo pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
+                sudo pip install docker
                 '''
             }
         }
