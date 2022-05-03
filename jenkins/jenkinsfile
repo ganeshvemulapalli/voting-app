@@ -6,6 +6,7 @@ pipeline {
             steps {
                 echo 'teststring'
                 sh '''
+                apt-get install python3-pip
                 pip3 install ansible[azure] -I
                 ansible-galaxy collection install azure.azcollection
                 pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
